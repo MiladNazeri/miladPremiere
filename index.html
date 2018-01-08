@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="./ext.js"></script>
+        <script src="./lib/CSInterface.js"></script>
+		<script src="./lib/jquery-1.9.1.js"></script>
+		<script src="./lib/Vulcan.js"></script>
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript">
+            var tagKeys = [];
+            var tags = {};
+            function loadHTMLTags(){
+                // alert("loadHTmltags")
+                window.__adobe_cep__.evalScript('$._PPP_.loadCurrentTags()',writeTagsCallBack);
+                // csInterface.evalScript('$._PPP_.loadCurrentTags()',writeTagsCallBack);
+            }
+            function writeTagsCallBack(data){
+                // alert("inWriteTags")
+                if (!data || data.length < 0) {
+                    alert("data nothing");
+                    return;
+                }
+                try {
+                    tags = JSON.parse(data);
+                    console.log(tags);
+                    tagKeys = Object.keys(tags);
+                    alert(JSON.stringify(makeCheckboxes()));
+                    document.getElementById("result").innerHTML = makeCheckboxes();
+
+                } catch(error) {
+                    alert("In error ")
+                    $.writeln(error);
+                }
+                // $.writeln(test["Action"][0]);
+            }
+
+            function makeCheckboxes(){
+                var checks = '';
+
+                tagKeys.forEach(function(tag){
+                    var checkArray = tags[tag];
+                    // alert(checkArray)
+                    checks +=
+                    "<h3>" +
+                    tag +
+                    "</h3>" +
+                    checkArray.map(function(check){
+                        return `<input
+                        type="checkbox"
+                        id=${tag}_${check}
+                        name=${tag}_${check}
+                        value=${tag}_${check} >
+                        <label for=${tag}_${check}>
+                            ${tag}_${check}
+                        </label>`
+                    }).join("");
+                    // alert(checks);
+
+                })
+                // $.writeln(checks);
+                // var div = $(`
+                //     <div>
+                //         ${checks}
+                //     </div>
+                //     `)
+                return checks;
+                // alert(JSON.stringify(div));
+            }
+            $( document ).ready(function() {
+
+            })
+        </script>
+    </head>
+    <body onLoad="onLoaded()">
+        <a href="javascript:history.go(0)">Refresh panel</a>
+        <button class="controlBg textStyle" id="btn_PPR000" onClick="evalScript('$._PPP_.getSelected()')">
+            Get Selected
+        </button>
+        <button class="controlBg textStyle" id="btn_PPR001" onClick="evalScript('$._PPP_.test()')">
+            Test
+        </button>
+        <button class="controlBg textStyle" id="btn_PPR002" onClick="evalScript('$._PPP_.loadTags()')">
+            LoadTags
+        </button>
+        <button class="controlBg textStyle" id="btn_PPR003" onClick="evalScript('$._PPP_.writeToTags()')">
+            Write Tags
+        </button>
+        <button class="controlBg textStyle" id="btn_PPR004" onClick="loadHTMLTags()">
+            Write HTML Tag
+        </button>
+        <div>
+        <div>
+        <div id="result">
+        </div>
+    </body>
+</html>
