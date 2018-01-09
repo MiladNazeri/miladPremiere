@@ -22,6 +22,7 @@ input[type=text]
 	margin-left:auto;
 	vertical-align:middle;
 	width:100%;
+    color: white;
 }
 
 #content ul {

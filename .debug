@@ -2,7 +2,7 @@
 <ExtensionList>
     <Extension Id="com.adobe.MiladPremiere">
         <HostList>
-            <Host Name="PPRO" Port="6666"/>
+            <Host Name="PPRO" Port="5555"/>
         </HostList>
     </Extension>
 </ExtensionList>

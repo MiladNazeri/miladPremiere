@@ -1,10 +1,8 @@
 $._tags = {
-	"Action": [
-		"Candid","Driving","Pose","VR-Demo"],
 	"City": [
 		"Berlin","Bordeaux","Frankfurt","Muzenberg","Neu-Anspach","Ny","Paris"],
 	"Country": [
-		"France","Germany","Iceland","Us"],
+		"France","Germany","Iceland","Neatherlands","Us"],
 	"Media-Type": [
 		"Audio","Photo","Video"],
 	"People": [

@@ -8,24 +8,29 @@
 		<script src="./lib/Vulcan.js"></script>
         <link href="css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript">
-            var tagKeys = [];
-            var tags = {};
+            var typeKeys = [];
+            var typesAndTags = {};
+            var result;
+            var typeInput;
+            var typeInputValue;
+            var removeType;
+            var removeTypeValue;
             function loadHTMLTags(){
                 // alert("loadHTmltags")
-                window.__adobe_cep__.evalScript('$._PPP_.loadCurrentTags()',writeTagsCallBack);
+                evalScript('$._PPP_.loadCurrentTags()',writeTagsCallBack);
                 // csInterface.evalScript('$._PPP_.loadCurrentTags()',writeTagsCallBack);
             }
             function writeTagsCallBack(data){
-                // alert("inWriteTags")
+                // alert("in write")
+                // alert(data)
                 if (!data || data.length < 0) {
                     alert("data nothing");
                     return;
                 }
                 try {
-                    tags = JSON.parse(data);
-                    console.log(tags);
-                    tagKeys = Object.keys(tags);
-                    alert(JSON.stringify(makeCheckboxes()));
+                    typesAndTags = JSON.parse(data);
+                    console.log(typesAndTags);
+                    typeKeys = Object.keys(typesAndTags);
                     document.getElementById("result").innerHTML = makeCheckboxes();
 
                 } catch(error) {
@@ -34,64 +39,127 @@
                 }
                 // $.writeln(test["Action"][0]);
             }
+            function submitTypeName(){
+                typeInput = $('#typeInput');
+                typeInputValue = typeInput.val();
+                typeInputValue = [typeInputValue[0].toUpperCase(),typeInputValue.split("").slice(1).join("")].join("");
+                if (!typesAndTags[typeInputValue]){
+                    typesAndTags[typeInputValue] = [];
+                }
+                sendNewTypesAndTags()
 
-            function makeCheckboxes(){
-                var checks = '';
+            }
+            function removeTypeName(){
+                removeType = $('#removeType');
+                removeTypeValue = removeType.val();
+                if (typesAndTags[removeTypeValue]){
+                    delete typesAndTags[removeTypeValue];
+                }
+                sendNewTypesAndTags()
 
-                tagKeys.forEach(function(tag){
-                    var checkArray = tags[tag];
-                    // alert(checkArray)
-                    checks +=
-                    "<h3>" +
-                    tag +
-                    "</h3>" +
-                    checkArray.map(function(check){
-                        return `<input
-                        type="checkbox"
-                        id=${tag}_${check}
-                        name=${tag}_${check}
-                        value=${tag}_${check} >
-                        <label for=${tag}_${check}>
-                            ${tag}_${check}
-                        </label>`
-                    }).join("");
-                    // alert(checks);
+            }
+            function sendNewTypesAndTags(){
+                var tat = JSON.stringify(typesAndTags);
+                evalScript(`$._PPP_.addNewTypesAndTags(${tat})`, writeTagsCallBack);
+            }
+            function addType () {
+                var typeHTML = `
+                    <div>
+                        <label
+                            for="typeInput">
+                                Enter a type name
+                        </label>
+                        <input
+                            type="text"
+                            id="typeInput"
+                            name="typeInputName">
+                        <button onClick="submitTypeName()">
+                            Submit Type Name
+                        </button>
+                    </div>
+                `
+                result = $('#result');
+                result.append(typeHTML);
+            }
+            function removeType()  {
+                alert("hi");
+                var removeHTML = `
+                    <div>
+                        <select id="removeType" name="removeHTML">
+                            ${typeKeys
+                                .map(function(type){
+                                    return `<option value="${type}">${type}</option>`
+                                }).join("")
+                            }
+                        </select>
+                        <button onClick="removeTypeName()">
+                            removeTypeName
+                        </button>
+                    </div>
+                `
+                result = $('#result');
+                result.append(removeHTML);
+            }
+            function makeCheckboxes () {
+                var tags = '';
+                typeKeys
+                    .forEach(function(type){
+                        var tagArray = typesAndTags[type];
+                        tags += `
+                            <h3>
+                                ${type}
+                            </h3>
+                            ${tagArray
+                                .map(function(tag){
+                                    return `
+                                        <input
+                                            type="checkbox"
+                                            id=${type}_${tag}
+                                            name=${type}_${tag}
+                                            value=${type}_${tag} >
+                                        <label for=${type}_${tag}>
+                                            ${tag}
+                                        </label>`
+                                    })
+                                .join("")}`
+                })
+                return tags;
+            }
+            $( document )
+                .ready(function() {
+
 
                 })
-                // $.writeln(checks);
-                // var div = $(`
-                //     <div>
-                //         ${checks}
-                //     </div>
-                //     `)
-                return checks;
-                // alert(JSON.stringify(div));
-            }
-            $( document ).ready(function() {
-
-            })
         </script>
     </head>
     <body onLoad="onLoaded()">
         <a href="javascript:history.go(0)">Refresh panel</a>
-        <button class="controlBg textStyle" id="btn_PPR000" onClick="evalScript('$._PPP_.getSelected()')">
-            Get Selected
-        </button>
-        <button class="controlBg textStyle" id="btn_PPR001" onClick="evalScript('$._PPP_.test()')">
-            Test
-        </button>
-        <button class="controlBg textStyle" id="btn_PPR002" onClick="evalScript('$._PPP_.loadTags()')">
-            LoadTags
-        </button>
-        <button class="controlBg textStyle" id="btn_PPR003" onClick="evalScript('$._PPP_.writeToTags()')">
-            Write Tags
-        </button>
-        <button class="controlBg textStyle" id="btn_PPR004" onClick="loadHTMLTags()">
-            Write HTML Tag
-        </button>
-        <div>
-        <div>
-        <div id="result">
+        <div id="content">
+            <button class="controlBg textStyle" id="btn_PPR000" onClick="evalScript('$._PPP_.getSelected()')">
+                Get Selected
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR001" onClick="evalScript('$._PPP_.test()')">
+                Test
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR002" onClick="evalScript('$._PPP_.loadTags()')">
+                LoadTags
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR003" onClick="evalScript('$._PPP_.writeToTags()')">
+                Write Tags
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR004" onClick="loadHTMLTags()">
+                Write HTML Tag
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR005" onClick="addType()">
+                Add Type
+            </button>
+            <button class="controlBg textStyle" id="btn_PPR006" onClick="removeType()">
+                Remove Type
+            </button>
+            <div>
+            <div>
+            <div id="result">
+            </div>
         </div>
     </body>
 </html>

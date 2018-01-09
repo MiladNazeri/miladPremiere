@@ -11,6 +11,7 @@ $._PPP_ = {
         file.open('r');
         var read = file.read();
         file.close();
+        // alert(JSON.stringify($._tags))
     },
     writingToJs: function() {
         var string = "$._tags = {\n\t";
@@ -26,7 +27,8 @@ $._PPP_ = {
         return string;
     },
     writeToTags: function() {
-        var pathBackup = "C:\\Users\\milad\\AppData\\Roaming\\Adobe\\CEP\\extensions\\Milad-Premiere\\jsx\\PPRO\\tags_backup.js";
+        var dateNow = Date.now();
+        var pathBackup = "C:\\Users\\milad\\AppData\\Roaming\\Adobe\\CEP\\extensions\\Milad-Premiere\\jsx\\PPRO\\_Backup\\tags_backup_"+dateNow+".js";
         var path = "C:\\Users\\milad\\AppData\\Roaming\\Adobe\\CEP\\extensions\\Milad-Premiere\\jsx\\PPRO\\tags.js";
         var file = new File(path);
         var fileBackup = new File(pathBackup);
@@ -79,6 +81,12 @@ $._PPP_ = {
 		success = app.bind("onSourceClipSelectedInProjectPanel", $._PPP_.projectPanelSelectionChanged);
 	},
     loadCurrentTags : function() {
+        // alert("in load current")
+        return JSON.stringify($._tags);
+    },
+    addNewTypesAndTags : function(typesAndTags) {
+        $._tags = typesAndTags;
+        this.writeToTags();
         return JSON.stringify($._tags);
     },
     projectPanelSelectionChanged : function() {

@@ -6,5 +6,7 @@ $._tags = {
 	"Media-Type": [
 		"Audio","Photo","Video"],
 	"People": [
-		"Bobby","David","Fred","Jeff","Leaha","Leon","Meagan","Milad","Nic","Oscar","Victoria","Vida","Zako"]
+		"Bobby","David","Fred","Jeff","Leaha","Leon","Meagan","Milad","Nic","Oscar","Victoria","Vida","Zako"],
+	"Test": [
+		]
 }
