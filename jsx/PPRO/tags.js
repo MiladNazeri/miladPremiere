@@ -1,4 +1,6 @@
 $._tags = {
+    "Action": [
+		"Candid","Driving","Pose","VR-Demo"],
 	"City": [
 		"Berlin","Bordeaux","Frankfurt","Muzenberg","Neu-Anspach","Ny","Paris"],
 	"Country": [
